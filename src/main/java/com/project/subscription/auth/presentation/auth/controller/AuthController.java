@@ -1,5 +1,6 @@
 package com.project.subscription.auth.presentation.auth.controller;
 
+import com.project.subscription.auth.application.auth.AuthService;
 import com.project.subscription.auth.presentation.auth.dto.request.SigninRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,12 +13,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/auth")
 public class AuthController {
 
-//    private final AuthService authService;
+    private final AuthService authService;
 
     // 로그인
     @PostMapping("/login")
     public void login(@RequestBody SigninRequest signinRequest) {
-
+        authService.login();
     }
 
     // 로그아웃
