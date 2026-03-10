@@ -1,7 +1,9 @@
-package com.project.subscription.auth.presentation.auth;
+package com.project.subscription.auth.presentation.auth.controller;
 
+import com.project.subscription.auth.presentation.auth.dto.request.SigninRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -14,7 +16,7 @@ public class AuthController {
 
     // 로그인
     @PostMapping("/login")
-    public void login() {
+    public void login(@RequestBody SigninRequest signinRequest) {
 
     }
 
