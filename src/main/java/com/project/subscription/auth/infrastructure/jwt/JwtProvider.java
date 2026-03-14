@@ -57,8 +57,22 @@ public class JwtProvider {
     }
 
     // token 검증
-    // 1. 변조되지 않았는지
-    // 2. 만료되지 않았는지
+    // 1. 변조 여부 검증
+    // 2. 만료 여부 검증
+    public boolean validateToken(String token) {
+
+        try{
+            Jwts.parser()
+                    .setSigningKey(secretKey)
+                    .parseClaimsJws(token); // 서명 검증, exp 검사, jwt 형식 검사
+            return true;
+
+        }catch (Exception e){
+
+            return false;
+        }
+
+    }
 
     // token에서 user id 추출
 }
