@@ -1,5 +1,7 @@
 package com.project.subscription.auth.infrastructure.jwt;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.stereotype.Component;
 import io.jsonwebtoken.Jwts;
@@ -75,4 +77,16 @@ public class JwtProvider {
     }
 
     // token에서 user id 추출
+    public Long getUserIdFromToken(String token) {
+
+        Jws<Claims> jws = Jwts.parser()
+                .setSigningKey(secretKey)
+                .parseClaimsJws(token);
+
+        Claims claims = jws.getBody();
+
+        Long userId = Long.valueOf(claims.getSubject());
+
+        return userId;
+    }
 }
