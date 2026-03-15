@@ -2,6 +2,7 @@ package com.project.subscription.auth.application.auth;
 
 import com.project.subscription.auth.domain.user.User;
 import com.project.subscription.auth.infrastructure.jwt.JwtProvider;
+import com.project.subscription.auth.presentation.auth.dto.internal.RefreshInternalDTO;
 import com.project.subscription.auth.presentation.auth.dto.internal.SigninInternalDTO;
 import com.project.subscription.auth.presentation.auth.dto.request.SigninRequest;
 import com.project.subscription.auth.repository.user.UserRepository;
@@ -17,7 +18,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtProvider jwtProvider;
 
-    // 로그인
+    // 로그인(인증 필터 타지 않음)
     public SigninInternalDTO login(SigninRequest request) {
 
         // 1. 이메일로 사용자 조회 ( 없으면 예외 처리)
@@ -42,7 +43,7 @@ public class AuthService {
         return signinInternalDTO;
     }
 
-    // 로그아웃
+    // 로그아웃(인증 필터 탐)
     public void logout(Long userId){
 
         // 1. RT 삭제
@@ -50,9 +51,29 @@ public class AuthService {
         // 2. AT 블랙리스트 처리
     }
 
-    // 토큰 재발급
-    public void reissue(){
+    // 토큰 재발급(인증 필터 타지 않음)
+    public RefreshInternalDTO refresh(String refreshToken){
 
+        // 1. rt 검증
+        jwtProvider.validateToken(refreshToken);
+
+        // 2. userId 추출
+        Long userId = jwtProvider.getUserIdFromToken(refreshToken);
+
+        // 3. 저장된 rt 비교
+
+        // 4. 새 at 발급
+        String newAccessToken = jwtProvider.createAccessToken(userId);
+
+        // 5. 새 rt 발급 (rt rotation)
+        String newRefreshToken = jwtProvider.createRefreshToken(userId);
+
+        // 6. 새 rt redis 저장(기존 rt 덮어쓰기)
+
+        // 7. 내부 DTO 반환
+        RefreshInternalDTO  refreshInternalDTO = new RefreshInternalDTO(newAccessToken, newRefreshToken);
+
+        return refreshInternalDTO;
     }
 
 }
