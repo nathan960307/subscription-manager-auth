@@ -43,8 +43,11 @@ public class AuthService {
     }
 
     // 로그아웃
-    public void logout(){
+    public void logout(Long userId){
 
+        // 1. RT 삭제
+
+        // 2. AT 블랙리스트 처리
     }
 
     // 토큰 재발급
