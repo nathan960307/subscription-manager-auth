@@ -107,6 +107,6 @@ public class JwtProvider {
 
         long remainingTime  = expireDate.getTime() - now;
 
-        return remainingTime ;
+        return Math.max(0, remainingTime);
     }
 }
