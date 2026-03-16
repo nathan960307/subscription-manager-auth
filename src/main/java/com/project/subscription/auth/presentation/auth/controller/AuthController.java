@@ -1,7 +1,9 @@
 package com.project.subscription.auth.presentation.auth.controller;
 
 import com.project.subscription.auth.application.auth.AuthService;
+import com.project.subscription.auth.presentation.auth.dto.internal.SigninInternalDto;
 import com.project.subscription.auth.presentation.auth.dto.request.SigninRequest;
+import com.project.subscription.auth.presentation.auth.dto.response.SigninResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,8 +19,14 @@ public class AuthController {
 
     // 로그인
     @PostMapping("/login")
-    public void login(@RequestBody SigninRequest signinRequest) {
-        authService.login();
+    public SigninResponse login(@RequestBody SigninRequest signinRequest) {
+
+        SigninInternalDto signinInternalDTO = authService.login(signinRequest);
+
+        SigninResponse signinResponse = SigninResponse.success(signinInternalDTO);
+
+        return signinResponse;
+
     }
 
     // 로그아웃
@@ -28,8 +36,8 @@ public class AuthController {
     }
 
     // 토큰 재발급
-    @PostMapping("/reissue")
-    public void reissue() {
+    @PostMapping("/refresh")
+    public void refresh() {
 
     }
 }
