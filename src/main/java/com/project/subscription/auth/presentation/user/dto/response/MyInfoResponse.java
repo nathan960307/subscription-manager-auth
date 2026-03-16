@@ -23,4 +23,12 @@ public class MyInfoResponse {
                 userInternalDto
         );
     }
+
+    public static MyInfoResponse delete() {
+        return new MyInfoResponse(
+                "회원 탈퇴 성공",
+                OffsetDateTime.now(),
+                null
+        );
+    }
 }
