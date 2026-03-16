@@ -1,9 +1,12 @@
 package com.project.subscription.auth.presentation.user.controller;
 
 import com.project.subscription.auth.application.user.UserService;
+import com.project.subscription.auth.presentation.user.dto.internal.UserInternalDto;
 import com.project.subscription.auth.presentation.user.dto.request.SignupRequest;
+import com.project.subscription.auth.presentation.user.dto.response.MyInfoResponse;
 import com.project.subscription.auth.presentation.user.dto.response.SignupResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
@@ -18,6 +21,7 @@ public class UserController {
     /// ===========================
 
     // 회원가입
+    // complete
     @PostMapping("/signup")
     public SignupResponse signup(@RequestBody SignupRequest signupRequest) {
 
@@ -30,9 +34,15 @@ public class UserController {
 
 
     // 내 정보 조회
+    // complete
     @GetMapping("/me")
-    public void getMyInfo(){
+    public MyInfoResponse getMyInfo(@AuthenticationPrincipal Long userId) {
 
+        UserInternalDto userInternalDto = userService.getMyInfo(userId);
+
+        MyInfoResponse myInfoResponse = MyInfoResponse.success(userInternalDto);
+
+        return myInfoResponse;
     }
 
     // 정보수정

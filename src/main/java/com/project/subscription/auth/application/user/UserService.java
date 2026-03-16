@@ -1,6 +1,7 @@
 package com.project.subscription.auth.application.user;
 
 import com.project.subscription.auth.domain.user.User;
+import com.project.subscription.auth.presentation.user.dto.internal.UserInternalDto;
 import com.project.subscription.auth.presentation.user.dto.request.SignupRequest;
 import com.project.subscription.auth.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     // 회원가입
+    // complete
     @Transactional
     public void signup(SignupRequest request) {
 
@@ -32,5 +34,20 @@ public class UserService {
 
         // 저장
         userRepository.save(user);
+    }
+
+    // 내 정보 조회
+    @Transactional(readOnly = true)
+    public UserInternalDto getMyInfo(Long userId) {
+
+        // 유저 조회
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        // User entity -> DTO 변환
+        UserInternalDto userInternalDto = UserInternalDto.from(user);
+
+        //반환
+        return userInternalDto;
     }
 }
