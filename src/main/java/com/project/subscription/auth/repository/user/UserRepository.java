@@ -12,4 +12,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     List<User> findAllByDeletedFalse(); // 삭제 여부가 null인 모든 사용자 조회
 
+    Optional<User> findByIdAndDeletedFalse(Long id); // 삭제 여부가 null인 단일 사용자 조회
+
 }
