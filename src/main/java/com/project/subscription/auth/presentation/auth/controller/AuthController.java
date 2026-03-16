@@ -1,10 +1,13 @@
 package com.project.subscription.auth.presentation.auth.controller;
 
 import com.project.subscription.auth.application.auth.AuthService;
+import com.project.subscription.auth.presentation.auth.dto.internal.RefreshInternalDto;
 import com.project.subscription.auth.presentation.auth.dto.internal.SigninInternalDto;
+import com.project.subscription.auth.presentation.auth.dto.request.RefreshRequest;
 import com.project.subscription.auth.presentation.auth.dto.request.SigninRequest;
+import com.project.subscription.auth.presentation.auth.dto.response.RefreshResponse;
 import com.project.subscription.auth.presentation.auth.dto.response.SigninResponse;
-import com.project.subscription.auth.presentation.user.dto.response.LogoutResponse;
+import com.project.subscription.auth.presentation.auth.dto.response.LogoutResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -52,7 +55,14 @@ public class AuthController {
 
     // 토큰 재발급
     @PostMapping("/refresh")
-    public void refresh() {
+    public RefreshResponse refresh(@RequestBody RefreshRequest refreshRequest) {
 
+        String RefreshToken = refreshRequest.getRefreshToken();
+
+        RefreshInternalDto refreshInternalDto = authService.refresh(RefreshToken);
+
+        RefreshResponse refreshResponse = RefreshResponse.success(refreshInternalDto);
+
+        return refreshResponse;
     }
 }

@@ -76,6 +76,11 @@ public class AuthService {
         Long userId = jwtProvider.getUserIdFromToken(refreshToken);
 
         // 3. 저장된 rt 비교
+        String savedRefreshToken = redisService.get("RT:" + userId);
+
+        if(savedRefreshToken == null || !savedRefreshToken.equals(refreshToken)){
+            throw new RuntimeException("Invalid refresh token");
+        }
 
         // 4. 새 at 발급
         String newAccessToken = jwtProvider.createAccessToken(userId);
@@ -84,6 +89,11 @@ public class AuthService {
         String newRefreshToken = jwtProvider.createRefreshToken(userId);
 
         // 6. 새 rt redis 저장(기존 rt 덮어쓰기)
+        redisService.save(
+                "RT:" + userId,
+                newRefreshToken,
+                jwtProvider.getRefreshTokenExpire()
+        );
 
         // 7. 내부 DTO 반환
         RefreshInternalDto refreshInternalDTO = new RefreshInternalDto(newAccessToken, newRefreshToken);
