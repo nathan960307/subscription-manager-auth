@@ -85,8 +85,15 @@ public class UserController {
     }
 
     // 특정 사용자 조회
+    // complete
     @GetMapping("/{id}")
-    public void getUser(@PathVariable Long id){
+    public AdminResponse getUser(@PathVariable Long id){
+
+        AdminUserInternalDto adminUserInternalDto = userService.getUser(id);
+
+        AdminResponse adminResponse = AdminResponse.getUser(adminUserInternalDto);
+
+        return adminResponse;
 
     }
 

@@ -84,6 +84,17 @@ public class UserService {
     }
 
     // 특정 사용자 조회
+    @Transactional(readOnly = true)
+    public AdminUserInternalDto getUser(Long userId){
+
+        // 사용자 조회
+        User user = userRepository.findByIdAndDeletedFalse(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        AdminUserInternalDto adminUserInternalDto = AdminUserInternalDto.from(user);
+
+        return adminUserInternalDto;
+    }
 
     // 특정 사용자 삭제
 }
