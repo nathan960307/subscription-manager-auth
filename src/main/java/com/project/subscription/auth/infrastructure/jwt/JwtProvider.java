@@ -3,16 +3,18 @@ package com.project.subscription.auth.infrastructure.jwt;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.Getter;
 import org.springframework.stereotype.Component;
 import io.jsonwebtoken.Jwts;
 
 import java.util.Date;
 
+@Getter
 @Component
 public class JwtProvider {
 
-    // secret key 설정, 32자 이상의 충분히 긴 문자 사용
-    private final String secretKey = "my-secret-key";
+    // secret key 설정, 32자 이상의 충분히 긴 문자 사용, 짧으면 jjwt 가 거부
+    private final String secretKey = "hellomynameisnadankimthankyousirseeyoulater";
 
     // access token 만료 시간 설정
     private final long accessTokenExpire = 1000 * 60 * 30; // 1초(1000ms) * 60 * 30 = 30분
