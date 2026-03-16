@@ -1,6 +1,7 @@
 package com.project.subscription.auth.application.user;
 
 import com.project.subscription.auth.domain.user.User;
+import com.project.subscription.auth.presentation.user.dto.internal.AdminUserInternalDto;
 import com.project.subscription.auth.presentation.user.dto.internal.UserInternalDto;
 import com.project.subscription.auth.presentation.user.dto.request.SignupRequest;
 import com.project.subscription.auth.repository.user.UserRepository;
@@ -8,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -61,6 +64,26 @@ public class UserService {
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         user.delete(); // deleted=true, deletedAt=now()
+    }
+
+    // 모든 사용자 조회
+    @Transactional(readOnly = true)
+    public List<AdminUserInternalDto> getAllUsers(){
+
+        // 사용자 목록 조회
+        List<User> users = userRepository.findAllByDeletedFalse();
+
+        // 사용자 entity -> dto로 변환
+        List<AdminUserInternalDto> adminUserInternalDtos = users.stream()
+                .map(AdminUserInternalDto::from)
+                .toList();
+
+        // dto 목록 반환
+        return adminUserInternalDtos;
 
     }
+
+    // 특정 사용자 조회
+
+    // 특정 사용자 삭제
 }

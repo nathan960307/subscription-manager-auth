@@ -1,13 +1,17 @@
 package com.project.subscription.auth.presentation.user.controller;
 
 import com.project.subscription.auth.application.user.UserService;
+import com.project.subscription.auth.presentation.user.dto.internal.AdminUserInternalDto;
 import com.project.subscription.auth.presentation.user.dto.internal.UserInternalDto;
 import com.project.subscription.auth.presentation.user.dto.request.SignupRequest;
+import com.project.subscription.auth.presentation.user.dto.response.AdminResponse;
 import com.project.subscription.auth.presentation.user.dto.response.MyInfoResponse;
 import com.project.subscription.auth.presentation.user.dto.response.SignupResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -52,6 +56,7 @@ public class UserController {
     }
 
     // 회원탈퇴
+    // complete
     @DeleteMapping("/me")
     public MyInfoResponse deleteMyInfo(@AuthenticationPrincipal Long userId) {
 
@@ -67,8 +72,15 @@ public class UserController {
     /// ===========================
 
     // 전체 사용자 조회
+    // complete
     @GetMapping
-    public void getAllUsers(){
+    public AdminResponse getAllUsers(){
+
+        List<AdminUserInternalDto> adminUserInternalDto = userService.getAllUsers();
+
+        AdminResponse adminResponse = AdminResponse.getAllUsers(adminUserInternalDto);
+
+        return adminResponse;
 
     }
 
