@@ -4,6 +4,7 @@ import com.project.subscription.auth.infrastructure.security.JwtAuthenticationFi
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -36,8 +37,9 @@ public class SecurityConfig {
                 )
                 // URL 접근 설정
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/signin").permitAll()
-                        .requestMatchers("/auth/refresh").permitAll()
+                        .requestMatchers("/api/v1/auth/login").permitAll()
+                        .requestMatchers("/api/v1/auth/refresh").permitAll()
+                        .requestMatchers("/api/v1/users/signup").permitAll()
                         .anyRequest().authenticated()
                 )
                 // JWT 필터 등록
