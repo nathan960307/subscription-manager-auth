@@ -53,8 +53,13 @@ public class UserController {
 
     // 회원탈퇴
     @DeleteMapping("/me")
-    public void deleteMyInfo(){
+    public MyInfoResponse deleteMyInfo(@AuthenticationPrincipal Long userId) {
 
+        userService.deleteMyInfo(userId);
+
+        MyInfoResponse myInfoResponse = MyInfoResponse.delete();
+
+        return myInfoResponse;
     }
 
     /// ===========================
