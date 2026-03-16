@@ -34,5 +34,14 @@ public class AdminResponse<T> {
         );
     }
 
+    public static AdminResponse<Void> deleteUser() {
+
+        return new AdminResponse<>(
+                "단일 사용자 삭제 성공",
+                OffsetDateTime.now(),
+                null
+        );
+    }
+
 
 }
