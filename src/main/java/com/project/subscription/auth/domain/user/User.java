@@ -4,6 +4,10 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import java.time.LocalDateTime;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
@@ -26,7 +30,23 @@ public class User {
     @Column(name = "role", nullable = false)
     private String role; // 역할
 
+    @Column(name ="deleted", nullable = false)
+    private boolean deleted = false; // 삭제 여부
+
+    @CreationTimestamp
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt; // 삭제 일자
+
     // 도메인 메서드
+
+    // 유저 생성
     public static User createUser(String email, String password) {
 
         User user = new User();
@@ -35,6 +55,12 @@ public class User {
         user.role = "USER";   // 기본값
 
         return user;
+    }
+
+    // 유저 삭제
+    public void delete() {
+        this.deleted = true;
+        this.deletedAt = LocalDateTime.now();
     }
 
 
