@@ -91,4 +91,22 @@ public class JwtProvider {
 
         return userId;
     }
+
+    // token에서 남은 만료시간 추출
+    public long getRemainingTime(String token) {
+
+        Jws<Claims> jws = Jwts.parser()
+                .setSigningKey(secretKey)
+                .parseClaimsJws(token);
+
+        Claims claims = jws.getBody();
+
+        Date expireDate = claims.getExpiration(); // 만료 시각
+
+        long now = System.currentTimeMillis(); // 현재 시각
+
+        long remainingTime  = expireDate.getTime() - now;
+
+        return remainingTime ;
+    }
 }
