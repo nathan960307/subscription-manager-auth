@@ -50,6 +50,7 @@ public class UserController {
     }
 
     // 정보수정
+    // todo
     @PatchMapping("/me")
     public void updateMyInfo(){
 
@@ -98,9 +99,15 @@ public class UserController {
     }
 
     // 특정 사용자 삭제
+    // complete
     @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable Long id){
+    public AdminResponse deleteUser(@PathVariable Long id){
 
+        userService.deleteUser(id);
+
+        AdminResponse adminResponse = AdminResponse.deleteUser();
+
+        return adminResponse;
     }
 
 }

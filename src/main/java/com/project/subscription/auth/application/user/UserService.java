@@ -97,4 +97,13 @@ public class UserService {
     }
 
     // 특정 사용자 삭제
+    @Transactional
+    public void deleteUser(Long userId){
+
+        // 사용자 조회
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        user.delete();
+    }
 }
