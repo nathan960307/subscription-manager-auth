@@ -1,6 +1,8 @@
-package com.project.subscription.auth.presentation.user;
+package com.project.subscription.auth.presentation.user.controller;
 
 import com.project.subscription.auth.application.user.UserService;
+import com.project.subscription.auth.presentation.user.dto.request.SignupRequest;
+import com.project.subscription.auth.presentation.user.dto.response.SignupResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,9 +19,15 @@ public class UserController {
 
     // 회원가입
     @PostMapping("/signup")
-    public void signup(){
+    public SignupResponse signup(@RequestBody SignupRequest signupRequest) {
 
+        userService.signup(signupRequest);
+
+        SignupResponse signinResponse = SignupResponse.success();
+
+        return signinResponse;
     }
+
 
     // 내 정보 조회
     @GetMapping("/me")
