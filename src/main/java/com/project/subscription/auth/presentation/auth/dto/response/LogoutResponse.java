@@ -1,4 +1,4 @@
-package com.project.subscription.auth.presentation.user.dto.response;
+package com.project.subscription.auth.presentation.auth.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
