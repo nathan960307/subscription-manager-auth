@@ -2,8 +2,9 @@ package com.project.subscription.auth.application.auth;
 
 import com.project.subscription.auth.domain.user.User;
 import com.project.subscription.auth.infrastructure.jwt.JwtProvider;
-import com.project.subscription.auth.presentation.auth.dto.internal.RefreshInternalDTO;
-import com.project.subscription.auth.presentation.auth.dto.internal.SigninInternalDTO;
+import com.project.subscription.auth.infrastructure.redis.RedisService;
+import com.project.subscription.auth.presentation.auth.dto.internal.RefreshInternalDto;
+import com.project.subscription.auth.presentation.auth.dto.internal.SigninInternalDto;
 import com.project.subscription.auth.presentation.auth.dto.request.SigninRequest;
 import com.project.subscription.auth.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,9 +18,10 @@ public class AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtProvider jwtProvider;
+    private final RedisService redisService;
 
     // 로그인(인증 필터 타지 않음)
-    public SigninInternalDTO login(SigninRequest request) {
+    public SigninInternalDto login(SigninRequest request) {
 
         // 1. 이메일로 사용자 조회 ( 없으면 예외 처리)
         User user = userRepository.findByEmail(request.getEmail())
@@ -35,10 +37,14 @@ public class AuthService {
 
         // 4. RefreshToken 생성 및 저장
         String refreshToken = jwtProvider.createRefreshToken(user.getId());
-        // rt 저장 로직 추가 필요
+        redisService.save(
+                "RT:" + user.getId(),
+                refreshToken,
+                jwtProvider.getRefreshTokenExpire()
+        );
         
         // 5. 내부 DTO 반환 ( 컨트롤러에서 Response 포장)
-        SigninInternalDTO signinInternalDTO = new SigninInternalDTO(accessToken, refreshToken);
+        SigninInternalDto signinInternalDTO = new SigninInternalDto(accessToken, refreshToken);
 
         return signinInternalDTO;
     }
@@ -52,7 +58,7 @@ public class AuthService {
     }
 
     // 토큰 재발급(인증 필터 타지 않음)
-    public RefreshInternalDTO refresh(String refreshToken){
+    public RefreshInternalDto refresh(String refreshToken){
 
         // 1. rt 검증
         jwtProvider.validateToken(refreshToken);
@@ -71,7 +77,7 @@ public class AuthService {
         // 6. 새 rt redis 저장(기존 rt 덮어쓰기)
 
         // 7. 내부 DTO 반환
-        RefreshInternalDTO  refreshInternalDTO = new RefreshInternalDTO(newAccessToken, newRefreshToken);
+        RefreshInternalDto refreshInternalDTO = new RefreshInternalDto(newAccessToken, newRefreshToken);
 
         return refreshInternalDTO;
     }
