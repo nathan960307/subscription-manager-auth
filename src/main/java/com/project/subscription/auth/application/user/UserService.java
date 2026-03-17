@@ -40,6 +40,7 @@ public class UserService {
     }
 
     // 내 정보 조회
+    // complete
     @Transactional(readOnly = true)
     public UserInternalDto getMyInfo(Long userId) {
 
