@@ -1,6 +1,5 @@
 package com.project.subscription.auth.presentation.user.dto.response;
 
-import com.project.subscription.auth.presentation.auth.dto.internal.SigninInternalDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
