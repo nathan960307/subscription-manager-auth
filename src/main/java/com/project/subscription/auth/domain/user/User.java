@@ -79,6 +79,16 @@ public class User {
         return user;
     }
 
+    // 유저 수정
+    public static User updateUser(String name, String phoneNumber){
+
+        User user = new User();
+        user.name = name;
+        user.phoneNumber = phoneNumber;
+
+        return user;
+    }
+
     // 유저 삭제
     public void delete() {
         this.deleted = true;
