@@ -1,5 +1,6 @@
 package com.project.subscription.auth.presentation.user.dto.request;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -7,8 +8,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class SignupRequest{
 
+    @NotBlank
     private String email;
+
+    @NotBlank
     private String password;
+
     private String name;
     private String phoneNumber;
 }
