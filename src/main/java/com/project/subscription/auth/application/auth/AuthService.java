@@ -23,19 +23,19 @@ public class AuthService {
     // 로그인(인증 필터 타지 않음)
     public SigninInternalDto login(SigninRequest request) {
 
-        // 1. 이메일로 사용자 조회
+        // 이메일로 사용자 조회
         User user = userRepository.findByEmailAndDeletedFalse(request.getEmail())
                 .orElseThrow(() -> new RuntimeException("이메일 또는 비밀번호가 올바르지 않습니다"));
 
-        // 2. 비밀번호 검증
+        // 비밀번호 검증
         if(!passwordEncoder.matches(request.getPassword(), user.getPassword())){
             throw new RuntimeException("이메일 또는 비밀번호가 올바르지 않습니다");
         }
 
-        // 3. JWT AccessToken 생성
+        // JWT AccessToken 생성
         String accessToken = jwtProvider.createAccessToken(user.getId());
 
-        // 4. RefreshToken 생성 및 저장
+        // RefreshToken 생성 및 저장
         String refreshToken = jwtProvider.createRefreshToken(user.getId());
         redisService.save(
                 "RT:" + user.getId(),
@@ -43,7 +43,7 @@ public class AuthService {
                 jwtProvider.getRefreshTokenExpire()
         );
         
-        // 5. 내부 DTO 반환 ( 컨트롤러에서 Response 포장)
+        // 내부 DTO 반환 ( 컨트롤러에서 Response 포장)
         SigninInternalDto signinInternalDTO = new SigninInternalDto(accessToken, refreshToken);
 
         return signinInternalDTO;
