@@ -115,6 +115,7 @@ public class UserService {
     }
 
     // 특정 사용자 삭제
+    // complete
     @Transactional
     public void deleteUser(Long userId){
 
