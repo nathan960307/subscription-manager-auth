@@ -44,6 +44,8 @@ public class AuthService {
                 refreshToken,
                 jwtProvider.getRefreshTokenExpire()
         );
+
+        // 로그인 로그 관리를 위한 DB 저장 - 필요시 추가
         
         // 내부 DTO 반환 ( 컨트롤러에서 Response 포장)
         SigninInternalDto signinInternalDTO = new SigninInternalDto(accessToken, refreshToken);
