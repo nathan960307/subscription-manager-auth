@@ -69,6 +69,11 @@ public class AuthService {
 
         String accessToken = bearerToken.substring(7);
 
+        // AT 블랙리스트 여부 확인(최적화)
+        if (redisService.exists("BL:" + accessToken)) {
+            return;
+        }
+
         // RT 삭제
         redisService.delete("RT:" + userId);
 
