@@ -32,11 +32,13 @@ public class AuthService {
             throw new RuntimeException("이메일 또는 비밀번호가 올바르지 않습니다");
         }
 
-        // JWT AccessToken 생성
+        // AccessToken 생성
         String accessToken = jwtProvider.createAccessToken(user.getId());
 
-        // RefreshToken 생성 및 저장
+        // RefreshToken 생성
         String refreshToken = jwtProvider.createRefreshToken(user.getId());
+
+        // RefreshToken 저장
         redisService.save(
                 "RT:" + user.getId(),
                 refreshToken,
