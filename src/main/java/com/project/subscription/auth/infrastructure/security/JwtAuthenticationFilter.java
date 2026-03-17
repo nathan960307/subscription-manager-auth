@@ -1,6 +1,7 @@
 package com.project.subscription.auth.infrastructure.security;
 
 import com.project.subscription.auth.infrastructure.jwt.JwtProvider;
+import com.project.subscription.auth.infrastructure.redis.RedisService;
 import jakarta.servlet.FilterChain;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
@@ -21,6 +22,7 @@ import java.util.List;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtProvider jwtProvider;
+    private final RedisService redisService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -29,9 +31,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         // Authoriaztion 헤더에서 토큰 꺼내기
         String bearer =  request.getHeader("Authorization");
 
+
         // 토큰 검증
         if(bearer != null && bearer.startsWith("Bearer ")){
             String token = bearer.substring(7);
+
+            // 블랙리스트 AT 검증
+            if (redisService.get("BL:" + token) != null) {
+                throw new RuntimeException("로그아웃된 토큰");
+                // 상태코드로 내려서 끝내던지
+                // AuthExceptionFilter 만들어서 예외처리 해야함
+                //
+            }
 
             if(jwtProvider.validateToken(token)){
 
