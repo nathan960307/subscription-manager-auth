@@ -73,6 +73,7 @@ public class AuthService {
     }
 
     // 토큰 재발급 (인증 필터 타지 않음)
+    // complete
     public RefreshInternalDto refresh(String refreshToken){
 
         // redis 락 사용
