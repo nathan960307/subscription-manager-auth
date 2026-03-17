@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -25,22 +26,23 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
-        // 1. Authoriaztion 헤더에서 토큰 꺼내기
+        // Authoriaztion 헤더에서 토큰 꺼내기
         String bearer =  request.getHeader("Authorization");
 
-        // 2. 토큰 검증
+        // 토큰 검증
         if(bearer != null && bearer.startsWith("Bearer ")){
             String token = bearer.substring(7);
 
             if(jwtProvider.validateToken(token)){
 
-                Long userId = jwtProvider.getUserIdFromToken(token);
+                Long userId = jwtProvider.getUserIdFromToken(token); // 토큰에서 userId 조회
+                String role  = jwtProvider.getRoleFromToken(token); // 토큰에서 role 조회
 
                 // 인증 객체 생성
                 Authentication authentication = new UsernamePasswordAuthenticationToken(
                         userId,
                         null,
-                        List.of()
+                        List.of(new SimpleGrantedAuthority(role))
                 );
 
                 // 인증 객체 저장
