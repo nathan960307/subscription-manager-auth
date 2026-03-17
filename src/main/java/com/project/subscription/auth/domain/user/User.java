@@ -24,7 +24,7 @@ public class User {
     @Column(name = "email", nullable = false, unique = true)
     private String email; // 사용자 이메일
 
-    @Column(name = "password", nullable = false)
+    @Column(name = "password")
     private String password; // 사용자 비밀번호
 
     @Column(name = "name")
@@ -43,7 +43,7 @@ public class User {
     private LocalDateTime lastLoginAt; // 최근 로그인 날짜
 
     @Column(name = "role", nullable = false)
-    private String role; // 역할
+    private String role; // 역할 , USER, ADMIN
 
     @Column(name = "is_deleted", nullable = false)
     private boolean deleted = false; // 삭제 여부
