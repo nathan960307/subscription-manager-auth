@@ -11,6 +11,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +24,7 @@ public class AuthService {
 
     // 로그인 (인증 필터 타지 않음)
     // complete
+    @Transactional
     public SigninInternalDto login(SigninRequest request) {
 
         // 이메일로 사용자 조회
