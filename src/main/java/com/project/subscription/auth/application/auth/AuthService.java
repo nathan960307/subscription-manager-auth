@@ -25,11 +25,11 @@ public class AuthService {
 
         // 1. 이메일로 사용자 조회
         User user = userRepository.findByEmailAndDeletedFalse(request.getEmail())
-                .orElseThrow(() -> new RuntimeException("사용자가 없습니다"));
+                .orElseThrow(() -> new RuntimeException("이메일 또는 비밀번호가 올바르지 않습니다"));
 
         // 2. 비밀번호 검증
         if(!passwordEncoder.matches(request.getPassword(), user.getPassword())){
-            throw new RuntimeException();
+            throw new RuntimeException("이메일 또는 비밀번호가 올바르지 않습니다");
         }
 
         // 3. JWT AccessToken 생성
