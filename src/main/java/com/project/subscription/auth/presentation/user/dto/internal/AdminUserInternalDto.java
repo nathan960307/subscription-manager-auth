@@ -17,8 +17,13 @@ public class AdminUserInternalDto {
     // 필드
     Long id;
     String email;
+    String name;
+    String phoneNumber;
     String role;
+    String provider;
     boolean deleted;
+    boolean blacklisted;
+    LocalDateTime lastLoginAt;
     LocalDateTime createdAt;
     LocalDateTime updatedAt;
     LocalDateTime deletedAt;
@@ -27,14 +32,19 @@ public class AdminUserInternalDto {
     // 정적 팩토리 메서드
     public static AdminUserInternalDto from(User user) {
         return  AdminUserInternalDto.builder()
-                    .id(user.getId())
-                    .email(user.getEmail())
-                    .role(user.getRole())
-                    .deleted(user.isDeleted())
-                    .createdAt(user.getCreatedAt())
-                    .updatedAt(user.getUpdatedAt())
-                    .deletedAt(user.getDeletedAt())
-                    .build();
+                .id(user.getId())
+                .email(user.getEmail())
+                .name(user.getName())
+                .phoneNumber(user.getPhoneNumber())
+                .role(user.getRole().name())
+                .provider(user.getProvider().name())
+                .deleted(user.isDeleted())
+                .blacklisted(user.isBlacklisted())
+                .lastLoginAt(user.getLastLoginAt())
+                .createdAt(user.getCreatedAt())
+                .updatedAt(user.getUpdatedAt())
+                .deletedAt(user.getDeletedAt())
+                .build();
     }
 
 }
