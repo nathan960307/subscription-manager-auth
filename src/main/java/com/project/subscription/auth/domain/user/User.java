@@ -34,7 +34,8 @@ public class User {
     private String phoneNumber; // 사용자 전화번호
 
     @Column(name = "provider")
-    private String provider; // 로그인 제공자
+    @Enumerated(EnumType.STRING)
+    private Provider provider; // 로그인 제공자
 
     @Column(name = "provider_id")
     private String providerId; // OAuth 고유 아이디
@@ -43,7 +44,8 @@ public class User {
     private LocalDateTime lastLoginAt; // 최근 로그인 날짜
 
     @Column(name = "role", nullable = false)
-    private String role; // 역할 , USER, ADMIN
+    @Enumerated(EnumType.STRING)
+    private Role role; // 역할 , USER, ADMIN
 
     @Column(name = "is_deleted", nullable = false)
     private boolean deleted = false; // 삭제 여부
@@ -70,7 +72,7 @@ public class User {
         User user = new User();
         user.email = email;
         user.password = password;
-        user.role = "USER";   // 기본값
+        user.role = Role.USER;   // 기본값
 
         return user;
     }
