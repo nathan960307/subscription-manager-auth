@@ -7,6 +7,7 @@ import com.project.subscription.auth.presentation.auth.dto.internal.RefreshInter
 import com.project.subscription.auth.presentation.auth.dto.internal.SigninInternalDto;
 import com.project.subscription.auth.presentation.auth.dto.request.SigninRequest;
 import com.project.subscription.auth.repository.user.UserRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -56,7 +57,11 @@ public class AuthService {
 
     // 로그아웃 (인증 필터 탐)
     // complete
-    public void logout(String accessToken, Long userId){
+    public void logout(HttpServletRequest request, Long userId){
+
+        // HttpServletRequest에서 토큰 조회
+        String bearerToken = request.getHeader("Authorization");
+        String accessToken = bearerToken.substring(7);
 
         // RT 삭제
         redisService.delete("RT:" + userId);

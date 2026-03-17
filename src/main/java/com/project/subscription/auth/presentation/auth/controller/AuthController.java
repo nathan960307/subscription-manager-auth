@@ -43,10 +43,7 @@ public class AuthController {
             HttpServletRequest request,
             @AuthenticationPrincipal Long userId) {
 
-        String bearerToken = request.getHeader("Authorization");
-        String accessToken = bearerToken.substring(7);
-
-        authService.logout(accessToken,userId);
+        authService.logout(request,userId);
 
         LogoutResponse logoutResponse = LogoutResponse.success();
 
