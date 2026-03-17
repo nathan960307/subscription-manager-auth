@@ -24,7 +24,7 @@ public class JwtProvider {
 
 
     // at 생성
-    public String createAccessToken(Long userId) {
+    public String createAccessToken(Long userId, String role) {
 
         // 시각 객체 생성
         Date now = new Date(); // 현재 시간 객체 생성
@@ -33,11 +33,12 @@ public class JwtProvider {
         // jwt 객체 조립
         String accessToken = Jwts.builder()
                 .setSubject(userId.toString())
+                .claim("role",role)
+                .claim("type","access")
                 .setIssuedAt(now) // 토큰 생성 시각
                 .setExpiration(expireDate) // 토큰 만료 시각
                 .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
-
 
         return accessToken;
     }
