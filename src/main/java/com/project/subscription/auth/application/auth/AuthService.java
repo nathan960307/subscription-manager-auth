@@ -23,9 +23,9 @@ public class AuthService {
     // 로그인(인증 필터 타지 않음)
     public SigninInternalDto login(SigninRequest request) {
 
-        // 1. 이메일로 사용자 조회 ( 없으면 예외 처리)
-        User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new RuntimeException());
+        // 1. 이메일로 사용자 조회
+        User user = userRepository.findByEmailAndDeletedFalse(request.getEmail())
+                .orElseThrow(() -> new RuntimeException("사용자가 없습니다"));
 
         // 2. 비밀번호 검증
         if(!passwordEncoder.matches(request.getPassword(), user.getPassword())){
