@@ -34,6 +34,9 @@ public class AuthService {
             throw new RuntimeException("이메일 또는 비밀번호가 올바르지 않습니다");
         }
 
+        // 최근 로그인 날짜 수정
+        user.updateLastLoginAt();
+
         // AccessToken 생성
         String accessToken = jwtProvider.createAccessToken(user.getId(),user.getRole().name());
 
