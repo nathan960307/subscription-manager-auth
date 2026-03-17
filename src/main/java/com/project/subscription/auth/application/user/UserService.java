@@ -86,8 +86,8 @@ public class UserService {
     @Transactional(readOnly = true)
     public List<AdminUserInternalDto> getAllUsers(){
 
-        // 사용자 목록 조회
-        List<User> users = userRepository.findAllByDeletedFalse();
+        // 사용자 목록 조회(삭제 유저 포함)
+        List<User> users = userRepository.findAll();
 
         // 사용자 entity -> dto로 변환
         List<AdminUserInternalDto> adminUserInternalDtos = users.stream()
