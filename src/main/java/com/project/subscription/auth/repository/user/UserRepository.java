@@ -10,8 +10,14 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByEmail(String email);
 
+    Optional<User> findByEmailAndDeletedFalse(String email); // 삭제여부가 null인 사용자중 email로 조회
+
     List<User> findAllByDeletedFalse(); // 삭제 여부가 null인 모든 사용자 조회
 
     Optional<User> findByIdAndDeletedFalse(Long id); // 삭제 여부가 null인 단일 사용자 조회
+
+    boolean existsByEmail(String email); // 아이디 중복 체크
+
+
 
 }
