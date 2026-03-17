@@ -111,4 +111,18 @@ public class JwtProvider {
 
         return Math.max(0, remainingTime);
     }
+
+    // token에서 role 추출
+    public String getRoleFromToken(String token) {
+
+        Jws<Claims> jws = Jwts.parser()
+                .setSigningKey(secretKey)
+                .parseClaimsJws(token);
+
+        Claims claims = jws.getBody();
+
+        String role = claims.get("role",String.class);
+
+        return role;
+    }
 }
