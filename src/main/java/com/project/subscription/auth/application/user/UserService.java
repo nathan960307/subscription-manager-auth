@@ -4,6 +4,7 @@ import com.project.subscription.auth.domain.user.User;
 import com.project.subscription.auth.presentation.user.dto.internal.AdminUserInternalDto;
 import com.project.subscription.auth.presentation.user.dto.internal.UserInternalDto;
 import com.project.subscription.auth.presentation.user.dto.request.SignupRequest;
+import com.project.subscription.auth.presentation.user.dto.request.UpdateUserRequest;
 import com.project.subscription.auth.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -56,6 +57,19 @@ public class UserService {
     }
 
     // 내 정보 수정
+    // complete
+    @Transactional
+    public UserInternalDto updateMyInfo(Long userId, UpdateUserRequest request) {
+
+        User user = userRepository.findByIdAndDeletedFalse(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        user.updateUser(request.getName(), request.getPhoneNumber());
+
+        UserInternalDto userInternalDto = UserInternalDto.from(user);
+
+        return userInternalDto;
+    }
 
     // 내 정보 삭제(탈퇴)
     @Transactional

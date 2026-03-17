@@ -4,6 +4,7 @@ import com.project.subscription.auth.application.user.UserService;
 import com.project.subscription.auth.presentation.user.dto.internal.AdminUserInternalDto;
 import com.project.subscription.auth.presentation.user.dto.internal.UserInternalDto;
 import com.project.subscription.auth.presentation.user.dto.request.SignupRequest;
+import com.project.subscription.auth.presentation.user.dto.request.UpdateUserRequest;
 import com.project.subscription.auth.presentation.user.dto.response.AdminResponse;
 import com.project.subscription.auth.presentation.user.dto.response.MyInfoResponse;
 import com.project.subscription.auth.presentation.user.dto.response.SignupResponse;
@@ -51,10 +52,16 @@ public class UserController {
     }
 
     // 정보수정
-    // todo
+    // complete
     @PatchMapping("/me")
-    public void updateMyInfo(){
+    public MyInfoResponse updateMyInfo(@AuthenticationPrincipal Long userId,
+                             @RequestBody UpdateUserRequest updateUserRequest) {
 
+        UserInternalDto userInternalDto = userService.updateMyInfo(userId,updateUserRequest);
+
+        MyInfoResponse myInfoResponse = MyInfoResponse.update(userInternalDto);
+
+        return myInfoResponse;
     }
 
     // 회원탈퇴
