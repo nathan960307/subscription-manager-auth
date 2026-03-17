@@ -38,7 +38,7 @@ public class AuthService {
         // RefreshToken 생성
         String refreshToken = jwtProvider.createRefreshToken(user.getId());
 
-        // RefreshToken 저장
+        // RefreshToken 저장 (단일 로그인)
         redisService.save(
                 "RT:" + user.getId(),
                 refreshToken,
