@@ -1,0 +1,4 @@
+### 로그아웃
+POST http://localhost:8081/api/v1/auth/logout
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwicm9sZSI6IlVTRVIiLCJ0eXBlIjoiYWNjZXNzIiwiaWF0IjoxNzczNzYxMDc0LCJleHAiOjE3NzM3NjI4NzR9.jDjQDLC3slMkl71X7wsrO4dLSJSXARbfpntEOAXzwQ4
+Content-Type: application/json

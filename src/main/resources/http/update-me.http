@@ -1,0 +1,9 @@
+### 내 정보 수정
+PATCH http://localhost:8081/api/v1/users/me
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwicm9sZSI6IlVTRVIiLCJ0eXBlIjoiYWNjZXNzIiwiaWF0IjoxNzczNzYxNzU3LCJleHAiOjE3NzM3NjM1NTd9.RNu0_s0UMPdJXRVulpZtOb2uqvVX3nwwGsQ2ePW-swA
+
+{
+  "name": "newName",
+  "phoneNumber": "01011111111"
+}

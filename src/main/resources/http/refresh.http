@@ -1,0 +1,7 @@
+### Refresh
+POST http://localhost:8081/api/v1/auth/refresh
+Content-Type: application/json
+
+{
+  "refreshToken": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwidHlwZSI6InJlZnJlc2giLCJpYXQiOjE3NzM3NjE0NDEsImV4cCI6MTc3NDM2NjI0MX0.IQEBXlxm4Guggznlr_8SDp6aqka7MS8kcwfHKz86BHU"
+}
