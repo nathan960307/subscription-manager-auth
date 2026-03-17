@@ -75,36 +75,54 @@ public class AuthService {
     // 토큰 재발급 (인증 필터 타지 않음)
     public RefreshInternalDto refresh(String refreshToken){
 
-        // 1. rt 검증
+        // redis 락 사용
+        String lockKey = "LOCK:RT:" + refreshToken; // redis 락 키
+        long lockTTL = 5000; // TTL 시간 : 5초
+        boolean acquired = redisService.acquireLock(lockKey, lockTTL); // 키 존재 여부
+
+        if(!acquired){ // 키 기존재
+            throw new RuntimeException("동시 재발급 시도 중");
+        }
+
+        try{
+        // rt 검증
         jwtProvider.validateToken(refreshToken);
 
-        // 2. userId 추출
+        // userId 추출
         Long userId = jwtProvider.getUserIdFromToken(refreshToken);
 
-        // 3. 저장된 rt 비교
+        // 저장된 RT 조회
         String savedRefreshToken = redisService.get("RT:" + userId);
 
+        // 저장된 rt 비교
         if(savedRefreshToken == null || !savedRefreshToken.equals(refreshToken)){
             throw new RuntimeException("Invalid refresh token");
         }
 
-        // 4. 새 at 발급
+        // 새 at 발급
         String newAccessToken = jwtProvider.createAccessToken(userId);
 
-        // 5. 새 rt 발급 (rt rotation)
+        // 새 rt 발급 (rt rotation)
         String newRefreshToken = jwtProvider.createRefreshToken(userId);
 
-        // 6. 새 rt redis 저장(기존 rt 덮어쓰기)
+        // 새 rt redis 저장(기존 rt 덮어쓰기)
         redisService.save(
                 "RT:" + userId,
                 newRefreshToken,
                 jwtProvider.getRefreshTokenExpire()
         );
 
-        // 7. 내부 DTO 반환
+        // 내부 DTO 반환
         RefreshInternalDto refreshInternalDTO = new RefreshInternalDto(newAccessToken, newRefreshToken);
 
         return refreshInternalDTO;
+
+        }finally {
+            // redis 락 해제
+            redisService.releaseLock(lockKey);
+        }
+
+
     }
 
 }
