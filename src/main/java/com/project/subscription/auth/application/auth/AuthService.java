@@ -61,6 +61,12 @@ public class AuthService {
 
         // HttpServletRequest에서 토큰 조회
         String bearerToken = request.getHeader("Authorization");
+
+        // Authorization 헤더가 없거나 Bearer 형식이 아닌 경우 예외
+        if (bearerToken == null || !bearerToken.startsWith("Bearer ")) {
+            throw new RuntimeException("Invalid Authorization header");
+        }
+
         String accessToken = bearerToken.substring(7);
 
         // RT 삭제
