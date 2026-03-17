@@ -21,6 +21,7 @@ public class AuthService {
     private final RedisService redisService;
 
     // 로그인(인증 필터 타지 않음)
+    // complete
     public SigninInternalDto login(SigninRequest request) {
 
         // 이메일로 사용자 조회
