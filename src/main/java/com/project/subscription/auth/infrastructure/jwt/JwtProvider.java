@@ -53,6 +53,7 @@ public class JwtProvider {
         // jwt 객체 조립
         String refreshToken = Jwts.builder()
                 .setSubject(userId.toString())
+                .claim("type","refresh")
                 .setIssuedAt(now) // 토큰 생성 시각
                 .setExpiration(expireDate) // 토큰 만료 시각
                 .signWith(SignatureAlgorithm.HS256, secretKey)
