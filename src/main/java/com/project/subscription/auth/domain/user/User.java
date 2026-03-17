@@ -66,13 +66,16 @@ public class User {
 
     // 도메인 메서드
 
-    // 유저 생성
-    public static User createUser(String email, String password) {
+    // 유저 생성( Local 회원가입)
+    public static User createUser(String email, String password, String name, String phoneNumber) {
 
         User user = new User();
         user.email = email;
         user.password = password;
+        user.name = name;
+        user.phoneNumber = phoneNumber;
         user.role = Role.USER;   // 기본값
+        user.provider = Provider.LOCAL;
 
         return user;
     }
