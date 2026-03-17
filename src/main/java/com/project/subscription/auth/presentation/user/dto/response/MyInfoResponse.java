@@ -31,4 +31,12 @@ public class MyInfoResponse {
                 null
         );
     }
+
+    public static MyInfoResponse update(UserInternalDto userInternalDto) {
+        return new MyInfoResponse(
+                "회원 수정 성공",
+                OffsetDateTime.now(),
+                null
+        );
+    }
 }
