@@ -44,7 +44,7 @@ public class UserService {
     public UserInternalDto getMyInfo(Long userId) {
 
         // 유저 조회
-        User user = userRepository.findById(userId)
+        User user = userRepository.findByIdAndDeletedFalse(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         // User entity -> DTO 변환
