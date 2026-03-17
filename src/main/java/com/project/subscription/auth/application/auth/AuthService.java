@@ -77,9 +77,15 @@ public class AuthService {
         // RT 삭제
         redisService.delete("RT:" + userId);
 
-        // AT 블랙리스트 처리
-        long remainingTime = jwtProvider.getRemainingTime(accessToken); // 남은 만료시간 계산
+        // 남은 만료시간 계산
+        long remainingTime = jwtProvider.getRemainingTime(accessToken);
 
+        // 남은 시간이 0인지 조회
+        if (remainingTime <= 0) {
+            return;
+        }
+
+        // AT 블랙리스트 처리
         redisService.save(
                 "BL:" + accessToken,
                 "logout",
