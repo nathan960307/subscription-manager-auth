@@ -31,4 +31,16 @@ public class RedisService {
     public boolean exists(String key) {
         return Boolean.TRUE.equals(redisTemplate.hasKey(key));
     }
+
+    // redis 락 획득
+    public boolean acquireLock(String key, long expireTimeMillis) {
+        Boolean success = redisTemplate.opsForValue().setIfAbsent(key, "locked", expireTimeMillis, TimeUnit.MILLISECONDS);
+        return Boolean.TRUE.equals(success);
+    }
+
+    // redis 락 해제
+    public void releaseLock(String key) {
+        redisTemplate.delete(key);
+    }
+
 }
