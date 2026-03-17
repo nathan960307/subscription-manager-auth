@@ -7,6 +7,7 @@ import com.project.subscription.auth.presentation.user.dto.request.SignupRequest
 import com.project.subscription.auth.presentation.user.dto.response.AdminResponse;
 import com.project.subscription.auth.presentation.user.dto.response.MyInfoResponse;
 import com.project.subscription.auth.presentation.user.dto.response.SignupResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +28,7 @@ public class UserController {
     // 회원가입
     // complete
     @PostMapping("/signup")
-    public SignupResponse signup(@RequestBody SignupRequest signupRequest) {
+    public SignupResponse signup(@Valid @RequestBody SignupRequest signupRequest) {
 
         userService.signup(signupRequest);
 
