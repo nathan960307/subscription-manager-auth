@@ -33,7 +33,7 @@ public class UserService {
         String encodedPassword = passwordEncoder.encode(request.getPassword());
 
         // user 생성(도메인 메서드)
-        User user = User.createUser(request.getEmail(), encodedPassword);
+        User user = User.createUser(request.getEmail(),encodedPassword,request.getName(),request.getPhoneNumber());
 
         // 저장
         userRepository.save(user);
