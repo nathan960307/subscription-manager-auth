@@ -36,7 +36,7 @@ public class MyInfoResponse {
         return new MyInfoResponse(
                 "회원 수정 성공",
                 OffsetDateTime.now(),
-                null
+                userInternalDto
         );
     }
 }
