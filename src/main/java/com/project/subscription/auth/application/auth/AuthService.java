@@ -35,7 +35,7 @@ public class AuthService {
         }
 
         // AccessToken 생성
-        String accessToken = jwtProvider.createAccessToken(user.getId());
+        String accessToken = jwtProvider.createAccessToken(user.getId(),user.getRole().name());
 
         // RefreshToken 생성
         String refreshToken = jwtProvider.createRefreshToken(user.getId());
@@ -114,6 +114,10 @@ public class AuthService {
         // userId 추출
         Long userId = jwtProvider.getUserIdFromToken(refreshToken);
 
+        // User 객체 조회
+            User user = userRepository.findById(userId)
+                    .orElseThrow(() -> new RuntimeException("<UNK> <UNK> <UNK> <UNK>"));
+
         // 저장된 RT 조회
         String savedRefreshToken = redisService.get("RT:" + userId);
 
@@ -123,7 +127,7 @@ public class AuthService {
         }
 
         // 새 at 발급
-        String newAccessToken = jwtProvider.createAccessToken(userId);
+        String newAccessToken = jwtProvider.createAccessToken(userId,user.getRole().name());
 
         // 새 rt 발급 (rt rotation)
         String newRefreshToken = jwtProvider.createRefreshToken(userId);
