@@ -77,7 +77,7 @@ public class AuthService {
 
         // redis 락 사용
         String lockKey = "LOCK:RT:" + refreshToken; // redis 락 키
-        long lockTTL = 5000; // TTL 시간 : 5초
+        long lockTTL = 3000; // TTL 시간 : 3초
         boolean acquired = redisService.acquireLock(lockKey, lockTTL); // 키 존재 여부
 
         if(!acquired){ // 키 기존재
@@ -121,8 +121,6 @@ public class AuthService {
             // redis 락 해제
             redisService.releaseLock(lockKey);
         }
-
-
     }
 
 }
