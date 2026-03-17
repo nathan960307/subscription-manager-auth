@@ -72,10 +72,11 @@ public class UserService {
     }
 
     // 내 정보 삭제(탈퇴)
+    // complete
     @Transactional
     public void deleteMyInfo(Long userId){
 
-        User user = userRepository.findById(userId)
+        User user = userRepository.findByIdAndDeletedFalse(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         user.delete(); // deleted=true, deletedAt=now()
