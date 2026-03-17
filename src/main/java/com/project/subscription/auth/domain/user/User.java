@@ -86,5 +86,10 @@ public class User {
         this.deletedAt = LocalDateTime.now();
     }
 
+    // 마지막 로그인 시간 설정
+    public void updateLastLoginAt() {
+        this.lastLoginAt = LocalDateTime.now();
+    }
+
 
 }
