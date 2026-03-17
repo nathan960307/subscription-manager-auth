@@ -20,7 +20,7 @@ public class AuthService {
     private final JwtProvider jwtProvider;
     private final RedisService redisService;
 
-    // 로그인(인증 필터 타지 않음)
+    // 로그인 (인증 필터 타지 않음)
     // complete
     public SigninInternalDto login(SigninRequest request) {
 
@@ -54,13 +54,14 @@ public class AuthService {
         return signinInternalDTO;
     }
 
-    // 로그아웃(인증 필터 탐)
+    // 로그아웃 (인증 필터 탐)
+    // complete
     public void logout(String accessToken, Long userId){
 
-        // 1. RT 삭제
+        // RT 삭제
         redisService.delete("RT:" + userId);
 
-        // 2. AT 블랙리스트 처리
+        // AT 블랙리스트 처리
         long remainingTime = jwtProvider.getRemainingTime(accessToken); // 남은 만료시간 계산
 
         redisService.save(
@@ -71,7 +72,7 @@ public class AuthService {
 
     }
 
-    // 토큰 재발급(인증 필터 타지 않음)
+    // 토큰 재발급 (인증 필터 타지 않음)
     public RefreshInternalDto refresh(String refreshToken){
 
         // 1. rt 검증
