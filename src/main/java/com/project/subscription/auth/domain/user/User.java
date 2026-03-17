@@ -80,13 +80,15 @@ public class User {
     }
 
     // 유저 수정
-    public static User updateUser(String name, String phoneNumber){
+    public void updateUser(String name, String phoneNumber){
 
-        User user = new User();
-        user.name = name;
-        user.phoneNumber = phoneNumber;
+        if(name != null){
+            this.name = name;
+        }
+        if(phoneNumber != null){
+            this.phoneNumber = phoneNumber;
+        }
 
-        return user;
     }
 
     // 유저 삭제
