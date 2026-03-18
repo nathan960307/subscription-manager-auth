@@ -12,9 +12,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
@@ -56,7 +56,26 @@ class UserServiceTest {
         verify(userRepository).save(any(User.class));
     }
 
-    // 회원가입 실패
+    // 회원가입 실패 - 이메일 중복
+    @Test
+    void signup_fail_duplicate_email() {
+
+        // given
+        SignupRequest request = new SignupRequest(
+                "test@test.com",
+                "1234",
+                "홍길동",
+                "01012345678"
+        );
+
+        when(userRepository.findByEmail(any()))
+                .thenReturn(Optional.of(mock(User.class)));
+
+        // when & then
+        assertThrows(RuntimeException.class, () -> {
+            userService.signup(request);
+        });
+    }
 
     // 내 정보 삭제(탈퇴)
 
