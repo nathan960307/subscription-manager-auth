@@ -1,5 +1,7 @@
 package com.project.subscription.auth.infrastructure.jwt;
 
+import com.project.subscription.auth.global.exception.CustomException;
+import com.project.subscription.auth.global.exception.ErrorCode;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -82,6 +84,18 @@ public class JwtProvider {
 
     }
 
+    // token을 cliams 객체로 변환
+    private Claims parseClaims(String token) {
+        try {
+            return Jwts.parser()
+                    .setSigningKey(secretKey)
+                    .parseClaimsJws(token)
+                    .getBody();
+        } catch (Exception e) {
+            throw new CustomException(ErrorCode.INVALID_TOKEN);
+        }
+    }
+
     // token에서 user id 추출
     public Long getUserIdFromToken(String token) {
 
@@ -127,4 +141,6 @@ public class JwtProvider {
 
         return role;
     }
+
+
 }
