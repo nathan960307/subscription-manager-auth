@@ -158,7 +158,10 @@ public class AuthService {
 
         }finally {
             // redis 락 해제
-            redisService.releaseLock(lockKey);
+            if(acquired){ // 첫번째 요청만 redis 락을 해제 할 수 있도록 보장
+                redisService.releaseLock(lockKey);
+            }
+
         }
     }
 
