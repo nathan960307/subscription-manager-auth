@@ -13,7 +13,7 @@ public enum ErrorCode {
     // 4000번대: 클라이언트 오류
     BAD_REQUEST(4000, "잘못된 요청"),
     UNAUTHORIZED(4010, "권한 없음"),
-    FORBIDDEN(4030, "인증 실패"),
+    FORBIDDEN(4030, "거부됨"),
     NOT_FOUND(4040, "리소스를 찾을 수 없음"),
 
     // 5000번대: 서버 오류
