@@ -40,8 +40,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             // 블랙리스트 AT 검증
             if (redisService.get("BL:" + token) != null) {
                 // AuthExceptionFilter 만들어서 예외처리 해야하던 아래와 같은 방법으로 상태 내리고 끝내야함
-                 response.setStatus(401);
-                 response.getWriter().write("로그아웃된 토큰");
+                response.setContentType("text/plain;charset=UTF-8");
+                response.setStatus(401);
+                response.getWriter().write("로그아웃된 토큰");
                  return;
             }
 
@@ -62,6 +63,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 }
             }catch (CustomException e){
+                response.setContentType("text/plain;charset=UTF-8");
                 response.setStatus(401);
                 response.getWriter().write("유효하지 않은 토큰");
                 return;
