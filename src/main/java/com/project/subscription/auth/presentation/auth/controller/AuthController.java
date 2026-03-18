@@ -7,7 +7,6 @@ import com.project.subscription.auth.presentation.auth.dto.internal.SigninIntern
 import com.project.subscription.auth.presentation.auth.dto.request.RefreshRequest;
 import com.project.subscription.auth.presentation.auth.dto.request.SigninRequest;
 import com.project.subscription.auth.presentation.auth.dto.response.RefreshResponse;
-import com.project.subscription.auth.presentation.auth.dto.response.SigninResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -26,14 +25,11 @@ public class AuthController {
     // 로그인
     // complete
     @PostMapping("/login")
-    public SigninResponse login(@RequestBody SigninRequest signinRequest) {
+    public ApiResponse<?> login(@RequestBody SigninRequest signinRequest) {
 
         SigninInternalDto signinInternalDTO = authService.login(signinRequest);
 
-        SigninResponse signinResponse = SigninResponse.success(signinInternalDTO);
-
-        return signinResponse;
-
+        return ApiResponse.success(signinInternalDTO);
     }
 
     // 로그아웃
