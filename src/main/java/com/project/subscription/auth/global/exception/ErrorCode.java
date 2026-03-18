@@ -15,10 +15,12 @@ public enum ErrorCode {
     UNAUTHORIZED(4010, "권한 없음"),
     LOGIN_FAILED(4011, "로그인 실패"),
     INVALID_REFRESH_TOKEN(4012, "유효하지 않은 refresh token"),
+    INVALID_TOKEN(4013, "유효하지 않은 token"),
     TOO_MANY_REQUESTS(4290, "요청 과다 또는 중복 요청"),
     FORBIDDEN(4030, "거부됨"),
     NOT_FOUND(4040, "리소스를 찾을 수 없음"),
     USER_NOT_FOUND(4041, "사용자를 찾을 수 없습니다"),
+    DUPLICATE_EMAIL(4091, "이미 존재하는 이메일입니다."),
 
     // 5000번대: 서버 오류
     INTERNAL_SERVER_ERROR(5000, "서버 내부 오류"),      // 500 Internal Server Error
