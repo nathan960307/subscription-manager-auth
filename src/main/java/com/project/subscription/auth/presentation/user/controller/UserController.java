@@ -10,6 +10,7 @@ import com.project.subscription.auth.presentation.user.dto.response.AdminRespons
 import com.project.subscription.auth.presentation.user.dto.response.MyInfoResponse;
 import com.project.subscription.auth.presentation.user.dto.response.SignupResponse;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Null;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -30,7 +31,7 @@ public class UserController {
     // 회원가입
     // complete
     @PostMapping("/signup")
-    public ApiResponse<?> signup(@Valid @RequestBody SignupRequest signupRequest) {
+    public ApiResponse<Null> signup(@Valid @RequestBody SignupRequest signupRequest) {
 
         userService.signup(signupRequest);
 
@@ -41,7 +42,7 @@ public class UserController {
     // 내 정보 조회
     // complete
     @GetMapping("/me")
-    public ApiResponse<?> getMyInfo(@AuthenticationPrincipal Long userId) {
+    public ApiResponse<UserInternalDto> getMyInfo(@AuthenticationPrincipal Long userId) {
 
         UserInternalDto userInternalDto = userService.getMyInfo(userId);
 
@@ -51,7 +52,7 @@ public class UserController {
     // 정보수정
     // complete
     @PatchMapping("/me")
-    public ApiResponse<?> updateMyInfo(@AuthenticationPrincipal Long userId,
+    public ApiResponse<UserInternalDto> updateMyInfo(@AuthenticationPrincipal Long userId,
                              @RequestBody UpdateUserRequest updateUserRequest) {
 
         UserInternalDto userInternalDto = userService.updateMyInfo(userId,updateUserRequest);
@@ -62,7 +63,7 @@ public class UserController {
     // 회원탈퇴
     // complete
     @DeleteMapping("/me")
-    public ApiResponse<?> deleteMyInfo(@AuthenticationPrincipal Long userId) {
+    public ApiResponse<Null> deleteMyInfo(@AuthenticationPrincipal Long userId) {
 
         userService.deleteMyInfo(userId);
 
@@ -76,18 +77,18 @@ public class UserController {
     // 전체 사용자 조회
     // complete
     @GetMapping
-    public ApiResponse<?> getAllUsers(){
+    public ApiResponse<List<AdminUserInternalDto>> getAllUsers(){
 
-        List<AdminUserInternalDto> adminUserInternalDto = userService.getAllUsers();
+        List<AdminUserInternalDto> adminUserInternalDtos = userService.getAllUsers();
 
-        return ApiResponse.success(adminUserInternalDto);
+        return ApiResponse.success(adminUserInternalDtos);
 
     }
 
     // 특정 사용자 조회
     // complete
     @GetMapping("/{id}")
-    public ApiResponse<?> getUser(@PathVariable Long id){
+    public ApiResponse<AdminUserInternalDto> getUser(@PathVariable Long id){
 
         AdminUserInternalDto adminUserInternalDto = userService.getUser(id);
 
@@ -98,7 +99,7 @@ public class UserController {
     // 특정 사용자 삭제
     // complete
     @DeleteMapping("/{id}")
-    public ApiResponse<?> deleteUser(@PathVariable Long id){
+    public ApiResponse<Null> deleteUser(@PathVariable Long id){
 
         userService.deleteUser(id);
 
