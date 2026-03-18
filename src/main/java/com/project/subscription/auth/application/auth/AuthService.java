@@ -111,26 +111,31 @@ public class AuthService {
         boolean acquired = redisService.acquireLock(lockKey, lockTTL); // 키 존재 여부
 
         if(!acquired){ // 키 기존재
-            throw new RuntimeException("동시 재발급 시도 중");
+            throw new CustomException(ErrorCode.TOO_MANY_REQUESTS);
         }
 
         try{
+
         // rt 검증
-        jwtProvider.validateToken(refreshToken);
+        boolean valid = jwtProvider.validateToken(refreshToken);
+
+        if(!valid){
+            throw new CustomException(ErrorCode.INVALID_REFRESH_TOKEN);
+        }
 
         // userId 추출
         Long userId = jwtProvider.getUserIdFromToken(refreshToken);
 
         // User 객체 조회
             User user = userRepository.findById(userId)
-                    .orElseThrow(() -> new RuntimeException("<UNK> <UNK> <UNK> <UNK>"));
+                    .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         // 저장된 RT 조회
         String savedRefreshToken = redisService.get("RT:" + userId);
 
         // 저장된 rt 비교
         if(savedRefreshToken == null || !savedRefreshToken.equals(refreshToken)){
-            throw new RuntimeException("Invalid refresh token");
+            throw new CustomException(ErrorCode.INVALID_REFRESH_TOKEN);
         }
 
         // 새 at 발급
