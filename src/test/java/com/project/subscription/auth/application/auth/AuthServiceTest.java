@@ -3,6 +3,7 @@ package com.project.subscription.auth.application.auth;
 import com.project.subscription.auth.infrastructure.jwt.JwtProvider;
 import com.project.subscription.auth.infrastructure.redis.RedisService;
 import com.project.subscription.auth.repository.user.UserRepository;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -26,4 +27,9 @@ public class AuthServiceTest {
 
     @InjectMocks
     private AuthService authService;
+
+    @Test
+    void login_success() {
+
+    }
 }
