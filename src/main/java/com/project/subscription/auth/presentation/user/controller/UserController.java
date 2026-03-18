@@ -1,6 +1,7 @@
 package com.project.subscription.auth.presentation.user.controller;
 
 import com.project.subscription.auth.application.user.UserService;
+import com.project.subscription.auth.global.response.ApiResponse;
 import com.project.subscription.auth.presentation.user.dto.internal.AdminUserInternalDto;
 import com.project.subscription.auth.presentation.user.dto.internal.UserInternalDto;
 import com.project.subscription.auth.presentation.user.dto.request.SignupRequest;
@@ -29,51 +30,43 @@ public class UserController {
     // 회원가입
     // complete
     @PostMapping("/signup")
-    public SignupResponse signup(@Valid @RequestBody SignupRequest signupRequest) {
+    public ApiResponse<?> signup(@Valid @RequestBody SignupRequest signupRequest) {
 
         userService.signup(signupRequest);
 
-        SignupResponse signinResponse = SignupResponse.success();
-
-        return signinResponse;
+        return ApiResponse.success(null);
     }
 
 
     // 내 정보 조회
     // complete
     @GetMapping("/me")
-    public MyInfoResponse getMyInfo(@AuthenticationPrincipal Long userId) {
+    public ApiResponse<?> getMyInfo(@AuthenticationPrincipal Long userId) {
 
         UserInternalDto userInternalDto = userService.getMyInfo(userId);
 
-        MyInfoResponse myInfoResponse = MyInfoResponse.success(userInternalDto);
-
-        return myInfoResponse;
+        return ApiResponse.success(userInternalDto);
     }
 
     // 정보수정
     // complete
     @PatchMapping("/me")
-    public MyInfoResponse updateMyInfo(@AuthenticationPrincipal Long userId,
+    public ApiResponse<?> updateMyInfo(@AuthenticationPrincipal Long userId,
                              @RequestBody UpdateUserRequest updateUserRequest) {
 
         UserInternalDto userInternalDto = userService.updateMyInfo(userId,updateUserRequest);
 
-        MyInfoResponse myInfoResponse = MyInfoResponse.update(userInternalDto);
-
-        return myInfoResponse;
+        return ApiResponse.success(userInternalDto);
     }
 
     // 회원탈퇴
     // complete
     @DeleteMapping("/me")
-    public MyInfoResponse deleteMyInfo(@AuthenticationPrincipal Long userId) {
+    public ApiResponse<?> deleteMyInfo(@AuthenticationPrincipal Long userId) {
 
         userService.deleteMyInfo(userId);
 
-        MyInfoResponse myInfoResponse = MyInfoResponse.delete();
-
-        return myInfoResponse;
+        return ApiResponse.success(null);
     }
 
     /// ===========================
@@ -83,39 +76,33 @@ public class UserController {
     // 전체 사용자 조회
     // complete
     @GetMapping
-    public AdminResponse getAllUsers(){
+    public ApiResponse<?> getAllUsers(){
 
         List<AdminUserInternalDto> adminUserInternalDto = userService.getAllUsers();
 
-        AdminResponse adminResponse = AdminResponse.getAllUsers(adminUserInternalDto);
-
-        return adminResponse;
+        return ApiResponse.success(adminUserInternalDto);
 
     }
 
     // 특정 사용자 조회
     // complete
     @GetMapping("/{id}")
-    public AdminResponse getUser(@PathVariable Long id){
+    public ApiResponse<?> getUser(@PathVariable Long id){
 
         AdminUserInternalDto adminUserInternalDto = userService.getUser(id);
 
-        AdminResponse adminResponse = AdminResponse.getUser(adminUserInternalDto);
-
-        return adminResponse;
+        return ApiResponse.success(adminUserInternalDto);
 
     }
 
     // 특정 사용자 삭제
     // complete
     @DeleteMapping("/{id}")
-    public AdminResponse deleteUser(@PathVariable Long id){
+    public ApiResponse<?> deleteUser(@PathVariable Long id){
 
         userService.deleteUser(id);
 
-        AdminResponse adminResponse = AdminResponse.deleteUser();
-
-        return adminResponse;
+        return ApiResponse.success(null);
     }
 
 }
