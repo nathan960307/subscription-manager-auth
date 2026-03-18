@@ -7,7 +7,6 @@ import com.project.subscription.auth.presentation.auth.dto.internal.SigninIntern
 import com.project.subscription.auth.presentation.auth.dto.request.RefreshRequest;
 import com.project.subscription.auth.presentation.auth.dto.request.SigninRequest;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.constraints.Null;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -35,7 +34,7 @@ public class AuthController {
     // 로그아웃
     // complete
     @PostMapping("/logout")
-    public ApiResponse<Null> logout(
+    public ApiResponse<Void> logout(
             HttpServletRequest request,
             @AuthenticationPrincipal Long userId) {
 

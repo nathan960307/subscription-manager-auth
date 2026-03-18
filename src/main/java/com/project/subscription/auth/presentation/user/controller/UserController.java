@@ -6,11 +6,7 @@ import com.project.subscription.auth.presentation.user.dto.internal.AdminUserInt
 import com.project.subscription.auth.presentation.user.dto.internal.UserInternalDto;
 import com.project.subscription.auth.presentation.user.dto.request.SignupRequest;
 import com.project.subscription.auth.presentation.user.dto.request.UpdateUserRequest;
-import com.project.subscription.auth.presentation.user.dto.response.AdminResponse;
-import com.project.subscription.auth.presentation.user.dto.response.MyInfoResponse;
-import com.project.subscription.auth.presentation.user.dto.response.SignupResponse;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Null;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -31,7 +27,7 @@ public class UserController {
     // 회원가입
     // complete
     @PostMapping("/signup")
-    public ApiResponse<Null> signup(@Valid @RequestBody SignupRequest signupRequest) {
+    public ApiResponse<Void> signup(@Valid @RequestBody SignupRequest signupRequest) {
 
         userService.signup(signupRequest);
 
@@ -63,7 +59,7 @@ public class UserController {
     // 회원탈퇴
     // complete
     @DeleteMapping("/me")
-    public ApiResponse<Null> deleteMyInfo(@AuthenticationPrincipal Long userId) {
+    public ApiResponse<Void> deleteMyInfo(@AuthenticationPrincipal Long userId) {
 
         userService.deleteMyInfo(userId);
 
@@ -99,7 +95,7 @@ public class UserController {
     // 특정 사용자 삭제
     // complete
     @DeleteMapping("/{id}")
-    public ApiResponse<Null> deleteUser(@PathVariable Long id){
+    public ApiResponse<Void> deleteUser(@PathVariable Long id){
 
         userService.deleteUser(id);
 
