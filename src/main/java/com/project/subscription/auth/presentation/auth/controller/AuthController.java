@@ -7,6 +7,7 @@ import com.project.subscription.auth.presentation.auth.dto.internal.SigninIntern
 import com.project.subscription.auth.presentation.auth.dto.request.RefreshRequest;
 import com.project.subscription.auth.presentation.auth.dto.request.SigninRequest;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.constraints.Null;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,7 +25,7 @@ public class AuthController {
     // 로그인
     // complete
     @PostMapping("/login")
-    public ApiResponse<?> login(@RequestBody SigninRequest signinRequest) {
+    public ApiResponse<SigninInternalDto> login(@RequestBody SigninRequest signinRequest) {
 
         SigninInternalDto signinInternalDTO = authService.login(signinRequest);
 
@@ -34,7 +35,7 @@ public class AuthController {
     // 로그아웃
     // complete
     @PostMapping("/logout")
-    public ApiResponse<?> logout(
+    public ApiResponse<Null> logout(
             HttpServletRequest request,
             @AuthenticationPrincipal Long userId) {
 
@@ -46,7 +47,7 @@ public class AuthController {
     // 토큰 재발급
     // complete
     @PostMapping("/refresh")
-    public ApiResponse<?> refresh(@RequestBody RefreshRequest refreshRequest) {
+    public ApiResponse<RefreshInternalDto> refresh(@RequestBody RefreshRequest refreshRequest) {
 
         String RefreshToken = refreshRequest.getRefreshToken();
 
