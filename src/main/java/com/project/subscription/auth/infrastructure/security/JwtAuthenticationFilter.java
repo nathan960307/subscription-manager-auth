@@ -1,6 +1,7 @@
 package com.project.subscription.auth.infrastructure.security;
 
 import com.project.subscription.auth.global.exception.CustomException;
+import com.project.subscription.auth.global.exception.ErrorCode;
 import com.project.subscription.auth.infrastructure.jwt.JwtProvider;
 import com.project.subscription.auth.infrastructure.redis.RedisService;
 import jakarta.servlet.FilterChain;
@@ -9,21 +10,27 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 
 import java.util.List;
+import java.util.Map;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtProvider jwtProvider;
     private final RedisService redisService;
+    private final ObjectMapper objectMapper;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -40,10 +47,20 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             // 블랙리스트 AT 검증
             if (redisService.get("BL:" + token) != null) {
                 // AuthExceptionFilter 만들어서 예외처리 해야하던 아래와 같은 방법으로 상태 내리고 끝내야함
-                response.setContentType("text/plain;charset=UTF-8");
-                response.setStatus(401);
-                response.getWriter().write("로그아웃된 토큰");
-                 return;
+
+                log.warn("블랙리스트 토큰 접근");
+
+                Map<String, Object> body = Map.of(
+                        "code", ErrorCode.INVALID_TOKEN.getCode(),
+                        "message", "로그아웃된 토큰"
+                );
+
+                String json = objectMapper.writeValueAsString(body);
+
+                response.setStatus(ErrorCode.INVALID_TOKEN.getHttpStatus());
+                response.setContentType("application/json;charset=UTF-8");
+                response.getWriter().write(json);
+                return;
             }
 
             try {
@@ -63,9 +80,19 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 }
             }catch (CustomException e){
-                response.setContentType("text/plain;charset=UTF-8");
-                response.setStatus(401);
-                response.getWriter().write("유효하지 않은 토큰");
+
+                log.warn("JWT 예외 발생: code={}, message={}", e.getCode(), e.getMessage());
+
+                Map<String, Object> body = Map.of(
+                        "code", e.getCode(),
+                        "message", e.getMessage()
+                );
+
+                String json = objectMapper.writeValueAsString(body);
+
+                response.setStatus(e.getHttpStatus());
+                response.setContentType("application/json;charset=UTF-8");
+                response.getWriter().write(json);
                 return;
 
             }
