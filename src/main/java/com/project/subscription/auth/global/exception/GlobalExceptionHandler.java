@@ -13,4 +13,10 @@ public class GlobalExceptionHandler {
     public ResponseEntity<?> handle(RuntimeException e) {
         return ResponseEntity.status(400).body(e.getMessage());
     }
+
+    // custom 예외 처리 핸들러
+    @ExceptionHandler(CustomException.class)
+    public ResponseEntity<?> handleCustom(CustomException e) {
+        return ResponseEntity.status(e.getStatus()).body(e.getMessage());
+    }
 }
