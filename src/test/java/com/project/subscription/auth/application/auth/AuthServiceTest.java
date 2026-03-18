@@ -6,6 +6,7 @@ import com.project.subscription.auth.infrastructure.redis.RedisService;
 import com.project.subscription.auth.presentation.auth.dto.internal.SigninInternalDto;
 import com.project.subscription.auth.presentation.auth.dto.request.SigninRequest;
 import com.project.subscription.auth.repository.user.UserRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -118,6 +119,37 @@ public class AuthServiceTest {
 
 
     }
+
+    // 로그아웃 성공
+    @Test
+    void logout_success() {
+
+        // given
+        String token = "Bearer AT";
+
+        HttpServletRequest request = mock(HttpServletRequest.class);
+
+        when(request.getHeader("Authorization")).thenReturn(token);
+
+        when(jwtProvider.getRemainingTime(any()))
+                .thenReturn(1000L);
+
+        when(redisService.exists(any()))
+                .thenReturn(false);
+
+        // when
+        authService.logout(request, 1L);
+
+        // then
+        verify(redisService).delete("RT:1");
+
+        verify(redisService).save(
+                startsWith("BL:"),
+                eq("logout"),
+                eq(1000L)
+        );
+    }
+
 
 
 }
