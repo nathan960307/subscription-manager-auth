@@ -1,5 +1,6 @@
 package com.project.subscription.auth.infrastructure.security;
 
+import com.project.subscription.auth.global.exception.CustomException;
 import com.project.subscription.auth.infrastructure.jwt.JwtProvider;
 import com.project.subscription.auth.infrastructure.redis.RedisService;
 import jakarta.servlet.FilterChain;
@@ -38,26 +39,33 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             // 블랙리스트 AT 검증
             if (redisService.get("BL:" + token) != null) {
-                throw new RuntimeException("로그아웃된 토큰");
-                // 상태코드로 내려서 끝내던지
-                // AuthExceptionFilter 만들어서 예외처리 해야함
-                //
+                // AuthExceptionFilter 만들어서 예외처리 해야하던 아래와 같은 방법으로 상태 내리고 끝내야함
+                 response.setStatus(401);
+                 response.getWriter().write("로그아웃된 토큰");
+                 return;
             }
 
-            if(jwtProvider.validateToken(token)){
+            try {
+                if (jwtProvider.validateToken(token)) {
 
-                Long userId = jwtProvider.getUserIdFromToken(token); // 토큰에서 userId 조회
-                String role  = jwtProvider.getRoleFromToken(token); // 토큰에서 role 조회
+                    Long userId = jwtProvider.getUserIdFromToken(token); // 토큰에서 userId 조회
+                    String role = jwtProvider.getRoleFromToken(token); // 토큰에서 role 조회
 
-                // 인증 객체 생성
-                Authentication authentication = new UsernamePasswordAuthenticationToken(
-                        userId,
-                        null,
-                        List.of(new SimpleGrantedAuthority(role))
-                );
+                    // 인증 객체 생성
+                    Authentication authentication = new UsernamePasswordAuthenticationToken(
+                            userId,
+                            null,
+                            List.of(new SimpleGrantedAuthority(role))
+                    );
 
-                // 인증 객체 저장
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+                    // 인증 객체 저장
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                }
+            }catch (CustomException e){
+                response.setStatus(401);
+                response.getWriter().write("유효하지 않은 토큰");
+                return;
+
             }
         }
 
