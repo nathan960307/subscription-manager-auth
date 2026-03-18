@@ -78,6 +78,22 @@ class UserServiceTest {
     }
 
     // 내 정보 삭제(탈퇴)
+    @Test
+    void deleteMyInfo_success() {
+
+        // given
+        Long userId = 1L;
+        User user = mock(User.class);
+
+        when(userRepository.findByIdAndDeletedFalse(userId))
+                .thenReturn(Optional.of(user));
+
+        // when
+        userService.deleteMyInfo(userId);
+
+        // then
+        verify(user).delete();
+    }
 
 
 
