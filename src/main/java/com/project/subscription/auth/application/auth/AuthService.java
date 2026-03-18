@@ -71,7 +71,7 @@ public class AuthService {
 
         // Authorization 헤더가 없거나 Bearer 형식이 아닌 경우 예외
         if (bearerToken == null || !bearerToken.startsWith("Bearer ")) {
-            throw new RuntimeException("Invalid Authorization header");
+            throw new CustomException(ErrorCode.UNAUTHORIZED);
         }
 
         String accessToken = bearerToken.substring(7);
