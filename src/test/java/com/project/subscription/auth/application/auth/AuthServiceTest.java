@@ -1,9 +1,12 @@
 package com.project.subscription.auth.application.auth;
 
+import com.project.subscription.auth.domain.user.Role;
 import com.project.subscription.auth.domain.user.User;
 import com.project.subscription.auth.infrastructure.jwt.JwtProvider;
 import com.project.subscription.auth.infrastructure.redis.RedisService;
+import com.project.subscription.auth.presentation.auth.dto.internal.RefreshInternalDto;
 import com.project.subscription.auth.presentation.auth.dto.internal.SigninInternalDto;
+import com.project.subscription.auth.presentation.auth.dto.request.RefreshRequest;
 import com.project.subscription.auth.presentation.auth.dto.request.SigninRequest;
 import com.project.subscription.auth.repository.user.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
@@ -17,8 +20,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -148,6 +150,50 @@ public class AuthServiceTest {
                 eq("logout"),
                 eq(1000L)
         );
+    }
+
+    // refresh 성공
+    @Test
+    void refresh_success() {
+
+        // given - data setup
+        Long userId = 1L;
+        String refreshToken = "rt";
+        String newAccessToken = "new-at";
+
+        RefreshRequest request = new RefreshRequest(refreshToken);
+
+        // given - mock setup
+
+        User user = mock(User.class);
+
+        when(userRepository.findById(userId))
+                .thenReturn(Optional.of(user));
+
+        when(user.getRole())
+                .thenReturn(Role.USER);
+
+        when(redisService.acquireLock(anyString(), anyLong()))
+                .thenReturn(true);
+
+        when(jwtProvider.getUserIdFromToken(refreshToken)) // RT → userId 추출
+                .thenReturn(userId);
+
+        when(jwtProvider.validateToken(refreshToken)) // RT 유효성 검사
+                .thenReturn(true);
+
+        when(redisService.get("RT:" + userId)) // Redis에 저장된 RT 조회
+                .thenReturn(refreshToken);
+
+        when(jwtProvider.createAccessToken(eq(userId), anyString())) // 새로운 AT 생성
+                .thenReturn(newAccessToken);
+
+        // when(실행)
+        RefreshInternalDto result = authService.refresh(request.getRefreshToken());
+
+        // then (검증)
+        assertNotNull(result);
+        assertEquals(newAccessToken, result.getAccessToken());
     }
 
 
