@@ -1,13 +1,13 @@
 package com.project.subscription.auth.presentation.auth.controller;
 
 import com.project.subscription.auth.application.auth.AuthService;
+import com.project.subscription.auth.global.response.ApiResponse;
 import com.project.subscription.auth.presentation.auth.dto.internal.RefreshInternalDto;
 import com.project.subscription.auth.presentation.auth.dto.internal.SigninInternalDto;
 import com.project.subscription.auth.presentation.auth.dto.request.RefreshRequest;
 import com.project.subscription.auth.presentation.auth.dto.request.SigninRequest;
 import com.project.subscription.auth.presentation.auth.dto.response.RefreshResponse;
 import com.project.subscription.auth.presentation.auth.dto.response.SigninResponse;
-import com.project.subscription.auth.presentation.auth.dto.response.LogoutResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -39,15 +39,13 @@ public class AuthController {
     // 로그아웃
     // complete
     @PostMapping("/logout")
-    public LogoutResponse logout(
+    public ApiResponse<?> logout(
             HttpServletRequest request,
             @AuthenticationPrincipal Long userId) {
 
         authService.logout(request,userId);
 
-        LogoutResponse logoutResponse = LogoutResponse.success();
-
-        return logoutResponse;
+        return ApiResponse.success(null);
     }
 
     // 토큰 재발급
