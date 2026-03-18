@@ -1,6 +1,8 @@
 package com.project.subscription.auth.application.auth;
 
 import com.project.subscription.auth.domain.user.User;
+import com.project.subscription.auth.global.exception.CustomException;
+import com.project.subscription.auth.global.exception.ErrorCode;
 import com.project.subscription.auth.infrastructure.jwt.JwtProvider;
 import com.project.subscription.auth.infrastructure.redis.RedisService;
 import com.project.subscription.auth.presentation.auth.dto.internal.RefreshInternalDto;
@@ -29,11 +31,11 @@ public class AuthService {
 
         // 이메일로 사용자 조회
         User user = userRepository.findByEmailAndDeletedFalse(request.getEmail())
-                .orElseThrow(() -> new RuntimeException("이메일 또는 비밀번호가 올바르지 않습니다"));
+                .orElseThrow(() -> new CustomException(ErrorCode.LOGIN_FAILED));
 
         // 비밀번호 검증
         if(!passwordEncoder.matches(request.getPassword(), user.getPassword())){
-            throw new RuntimeException("이메일 또는 비밀번호가 올바르지 않습니다");
+            throw new CustomException(ErrorCode.LOGIN_FAILED);
         }
 
         // 최근 로그인 날짜 수정
