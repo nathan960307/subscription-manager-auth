@@ -17,6 +17,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -39,6 +40,9 @@ public class AuthServiceTest {
     @InjectMocks
     private AuthService authService;
 
+    // 테스트 메서드
+
+    // 로그인 성공
     @Test
     void login_success() {
 
@@ -83,4 +87,37 @@ public class AuthServiceTest {
 
 
     }
+
+    // 로그인 실패
+    @Test
+    void login_fail() {
+
+        // given - data setup
+        SigninRequest request = new SigninRequest("test@test.com", "1234");
+        User user = User.createUser(
+                "test@test.com",
+                "encodedPassword",
+                "홍길동",
+                "01012345678"
+        );
+
+        ReflectionTestUtils.setField(user, "id", 1L); // id 강제 삽입
+
+        // given - mock setup
+        when(userRepository.findByEmailAndDeletedFalse(any()))
+                .thenReturn(Optional.of(user));
+
+        when(passwordEncoder.matches(any(), any()))
+                .thenReturn(false);
+
+
+        // then (검증)
+        assertThrows(RuntimeException.class, () -> {
+            authService.login(request);
+        });
+
+
+    }
+
+
 }
