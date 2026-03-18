@@ -1,6 +1,8 @@
 package com.project.subscription.auth.application.user;
 
 import com.project.subscription.auth.domain.user.User;
+import com.project.subscription.auth.global.exception.CustomException;
+import com.project.subscription.auth.global.exception.ErrorCode;
 import com.project.subscription.auth.presentation.user.dto.internal.AdminUserInternalDto;
 import com.project.subscription.auth.presentation.user.dto.internal.UserInternalDto;
 import com.project.subscription.auth.presentation.user.dto.request.SignupRequest;
@@ -27,7 +29,7 @@ public class UserService {
 
         // 이메일 중복 검사
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {
-            throw new RuntimeException("이미 존재하는 이메일입니다.");
+            throw new CustomException(ErrorCode.DUPLICATE_EMAIL);
         }
 
         // 비밀번호 암호화
@@ -47,7 +49,7 @@ public class UserService {
 
         // 유저 조회
         User user = userRepository.findByIdAndDeletedFalse(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         // User entity -> DTO 변환
         UserInternalDto userInternalDto = UserInternalDto.from(user);
@@ -62,7 +64,7 @@ public class UserService {
     public UserInternalDto updateMyInfo(Long userId, UpdateUserRequest request) {
 
         User user = userRepository.findByIdAndDeletedFalse(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         user.updateUser(request.getName(), request.getPhoneNumber());
 
@@ -77,7 +79,7 @@ public class UserService {
     public void deleteMyInfo(Long userId){
 
         User user = userRepository.findByIdAndDeletedFalse(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         user.delete(); // deleted=true, deletedAt=now()
     }
@@ -107,7 +109,7 @@ public class UserService {
 
         // 사용자 조회
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         AdminUserInternalDto adminUserInternalDto = AdminUserInternalDto.from(user);
 
@@ -121,7 +123,7 @@ public class UserService {
 
         // 사용자 조회
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         user.delete();
     }
