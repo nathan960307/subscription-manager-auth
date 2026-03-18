@@ -47,14 +47,12 @@ public class AuthController {
     // 토큰 재발급
     // complete
     @PostMapping("/refresh")
-    public RefreshResponse refresh(@RequestBody RefreshRequest refreshRequest) {
+    public ApiResponse<?> refresh(@RequestBody RefreshRequest refreshRequest) {
 
         String RefreshToken = refreshRequest.getRefreshToken();
 
         RefreshInternalDto refreshInternalDto = authService.refresh(RefreshToken);
 
-        RefreshResponse refreshResponse = RefreshResponse.success(refreshInternalDto);
-
-        return refreshResponse;
+        return ApiResponse.success(refreshInternalDto);
     }
 }
