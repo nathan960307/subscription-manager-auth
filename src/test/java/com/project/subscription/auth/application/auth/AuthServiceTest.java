@@ -196,6 +196,75 @@ public class AuthServiceTest {
         assertEquals(newAccessToken, result.getAccessToken());
     }
 
+    // refresh 실패 - rt 불일치
+    @Test
+    void refresh_fail_invalid_rt() {
+
+        // given
+        Long userId = 1L;
+        String refreshToken = "rt";
+        String savedRt = "different-rt";
+
+        RefreshRequest request = new RefreshRequest(refreshToken);
+
+        User user = mock(User.class);
+
+        // mock
+        when(redisService.acquireLock(anyString(), anyLong()))
+                .thenReturn(true);
+
+        when(jwtProvider.validateToken(refreshToken))
+                .thenReturn(true);
+
+        when(jwtProvider.getUserIdFromToken(refreshToken))
+                .thenReturn(userId);
+
+        when(userRepository.findById(userId))
+                .thenReturn(Optional.of(user));
+
+        when(redisService.get("RT:" + userId))
+                .thenReturn(savedRt);
+
+        // when & then
+        assertThrows(RuntimeException.class, () -> {
+            authService.refresh(request.getRefreshToken());
+        });
+    }
+
+    // refresh 실패 - rt 미존재
+    @Test
+    void refresh_fail_no_rt() {
+
+        // given
+        Long userId = 1L;
+        String refreshToken = "rt";
+
+        RefreshRequest request = new RefreshRequest(refreshToken);
+
+        User user = mock(User.class);
+
+        // mock
+        when(redisService.acquireLock(anyString(), anyLong()))
+                .thenReturn(true);
+
+        when(jwtProvider.validateToken(refreshToken))
+                .thenReturn(true);
+
+        when(jwtProvider.getUserIdFromToken(refreshToken))
+                .thenReturn(userId);
+
+        when(userRepository.findById(userId))
+                .thenReturn(Optional.of(user));
+
+        when(redisService.get("RT:" + userId))
+                .thenReturn(null);
+
+        // when & then
+        assertThrows(RuntimeException.class, () -> {
+            authService.refresh(request.getRefreshToken());
+        });
+    }
+
 
 
 }
