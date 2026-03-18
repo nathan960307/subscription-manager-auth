@@ -44,6 +44,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     // jackson
     implementation 'com.fasterxml.jackson.core:jackson-databind'
+    // H2
+    testImplementation 'com.h2database:h2'
 
 }
 
