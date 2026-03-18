@@ -6,7 +6,6 @@ import com.project.subscription.auth.presentation.auth.dto.internal.RefreshInter
 import com.project.subscription.auth.presentation.auth.dto.internal.SigninInternalDto;
 import com.project.subscription.auth.presentation.auth.dto.request.RefreshRequest;
 import com.project.subscription.auth.presentation.auth.dto.request.SigninRequest;
-import com.project.subscription.auth.presentation.auth.dto.response.RefreshResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
