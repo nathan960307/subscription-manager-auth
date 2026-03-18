@@ -99,11 +99,13 @@ public class JwtProvider {
     // token에서 user id 추출
     public Long getUserIdFromToken(String token) {
 
-        Jws<Claims> jws = Jwts.parser()
-                .setSigningKey(secretKey)
-                .parseClaimsJws(token);
+//        Jws<Claims> jws = Jwts.parser()
+//                .setSigningKey(secretKey)
+//                .parseClaimsJws(token);
+//
+//        Claims claims = jws.getBody();
 
-        Claims claims = jws.getBody();
+        Claims claims = parseClaims(token);
 
         Long userId = Long.valueOf(claims.getSubject());
 
@@ -113,11 +115,13 @@ public class JwtProvider {
     // token에서 남은 만료시간 추출
     public long getRemainingTime(String token) {
 
-        Jws<Claims> jws = Jwts.parser()
-                .setSigningKey(secretKey)
-                .parseClaimsJws(token);
+//        Jws<Claims> jws = Jwts.parser()
+//                .setSigningKey(secretKey)
+//                .parseClaimsJws(token);
+//
+//        Claims claims = jws.getBody();
 
-        Claims claims = jws.getBody();
+        Claims claims = parseClaims(token);
 
         Date expireDate = claims.getExpiration(); // 만료 시각
 
@@ -131,11 +135,13 @@ public class JwtProvider {
     // token에서 role 추출
     public String getRoleFromToken(String token) {
 
-        Jws<Claims> jws = Jwts.parser()
-                .setSigningKey(secretKey)
-                .parseClaimsJws(token);
+//        Jws<Claims> jws = Jwts.parser()
+//                .setSigningKey(secretKey)
+//                .parseClaimsJws(token);
+//
+//        Claims claims = jws.getBody();
 
-        Claims claims = jws.getBody();
+        Claims claims = parseClaims(token);
 
         String role = claims.get("role",String.class);
 
