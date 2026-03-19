@@ -20,7 +20,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Docker build
-        run:
+        run: |
           docker build -t nathan9603/subscription-auth:latest \
           -t nathan9603/subscription-auth:v1.0.0 .
 
