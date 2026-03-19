@@ -1,0 +1,48 @@
+name: CD
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 코드 가져오기
+        uses: actions/checkout@v3
+
+      - name: Docker build
+        run:
+          docker build -t nathan9603/subscription-auth:latest \
+          -t nathan9603/subscription-auth:v1.0.0 .
+
+      - name: Docker login
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+      - name: Docker push
+        run: |
+          docker push nathan9603/subscription-auth:latest
+          docker push nathan9603/subscription-auth:v1.0.0
+
+      - name: EC2 접속 후 실행
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_KEY }}
+          script: |
+            docker stop auth-server || true
+            docker rm auth-server || true
+
+            docker run -d --name auth-server -p 8081:8081 \
+              -e SPRING_PROFILES_ACTIVE=prod \
+              -e SERVER_PORT=${{ secrets.SERVER_PORT }} \
+              -e DB_URL=${{ secrets.DB_URL }} \
+              -e DB_USERNAME=${{ secrets.DB_USERNAME }} \
+              -e DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
+              -e REDIS_HOST=${{ secrets.REDIS_HOST }} \
+              -e REDIS_PORT=${{ secrets.REDIS_PORT }} \
+              -e REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }} \
+              -e JWT_SECRET=${{ secrets.JWT_SECRET }} \
+              nathan9603/subscription-auth:latest
