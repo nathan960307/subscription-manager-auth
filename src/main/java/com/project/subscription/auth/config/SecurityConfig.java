@@ -44,6 +44,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/users/signup").permitAll()
                         .requestMatchers("/error").permitAll()
                         .requestMatchers("/actuator/prometheus").permitAll()
+                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 // JWT 필터 등록
