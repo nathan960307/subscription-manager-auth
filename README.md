@@ -97,3 +97,6 @@ JWT 기반 Stateless 인증 구조를 통해 확장성과 성능을 고려하여
 
 - Business Server  
   https://github.com/nathan960307/subscription-manager-business
+
+- 현재 서비스는 AWS EC2 환경에서 운영 중
+- 보안상 실제 주소는 공개하지 않음
