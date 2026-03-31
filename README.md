@@ -31,6 +31,7 @@ JWT 기반 Stateless 인증 구조를 통해 확장성과 성능을 고려하여
 - Refresh Token 기반 재발급
 - 로그아웃 처리 (토큰 무효화)
 - JWT 기반 인증/인가 (Stateless)
+- Micrometer를 활용한 애플리케이션 메트릭 수집 및 Prometheus/Grafana 시각화
 
 ---
 
